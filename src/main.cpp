@@ -3,36 +3,64 @@
 int main()
 {
     std::unordered_map<int, std::string> chess_pieces;
-    std::unordered_map<int, std::vector<int>> allowed_moves;
+    std::unordered_map<int, std::vector<int>> allowed_white_moves;
+    std::unordered_map<int, std::vector<int>> allowed_black_moves;
+    int white_king_position=74;
+    int black_king_position=04;
+
     chess_pieces[1] = "pawns";
     chess_pieces[2] = "Rook";
     chess_pieces[3] = "knigth";
     chess_pieces[4] = "bishop";
     chess_pieces[5] = "queen";
     chess_pieces[6] = "king";
-    
+
     std::vector<std::vector<int>> chess_board = {
     //   0   1   2   3   4   5   6   7
         {22, 32, 42, 52, 62, 42, 32, 22}, // 0
         {12, 12, 12, 12, 12, 12, 12, 12}, // 1
         {00, 00, 00, 00, 00, 00, 00, 00}, // 2
-        {00, 00, 00, 52, 00, 00, 00, 00}, // 3
+        {00, 00, 00, 00, 00, 00, 00, 00}, // 3
         {00, 00, 00, 00, 00, 00, 00, 00}, // 4
-        {00, 00, 00, 00, 00, 00, 00, 00}, // 5
+        {00, 00, 00, 00, 00, 00, 52, 00}, // 5
         {11, 11, 11, 11, 11, 11, 11, 11}, // 6
         {21, 31, 41, 51, 61, 41, 31, 21}  // 7
     };
 
-    for (int i = 0; i < chess_board.size(); i++)
-    {
-        for (int j = 0; j < chess_board[0].size(); j++)
-        {
-            std::cout << chess_board[i][j] << " ";
-        }
-        std::cout << std::endl;
-    }
     // std::cout<<allowed_moves.size();
-    check(allowed_moves, chess_board);
-    std::cout << allowed_moves.size();
-    // for(auto &p : allowed_moves[31])std::cout<< p<< " "<<std::endl;
+    int start = 0;
+    int stop = 0;
+    while (start != 99 && stop != 99)
+    {
+        for (int i = 0; i < chess_board.size(); i++)
+        {
+            for (int j = 0; j < chess_board[0].size(); j++)
+            {
+                if(chess_board[i][j]==0){
+                    std::cout<<"00 ";
+                    continue;
+                }
+                std::cout << chess_board[i][j] << " ";
+            }
+            std::cout << std::endl;
+        }
+        std::cin >> start >> stop;
+        std::vector<int> selected_moves = find_moves(chess_board, start, chess_board[start / 10][start % 10]);
+        auto it = std::find(selected_moves.begin(), selected_moves.end(), stop);
+        if (it != selected_moves.end())
+        {
+            move_piece(chess_board, start, stop);
+            if(start==white_king_position)white_king_position=stop;
+            if(start==black_king_position)black_king_position=stop;
+            check(allowed_white_moves, allowed_black_moves, chess_board);
+            if(is_black_checked(black_king_position,allowed_white_moves))std::cout<<"black is in check"<<std::endl;
+            if(is_white_checked(white_king_position,allowed_black_moves))std::cout<<"white is in check"<<std::endl;
+        }
+        else
+        {
+            std::cout << "attempted and illegal move";
+        }
+        Sleep(5000);
+        system("cls");
+    }
 }

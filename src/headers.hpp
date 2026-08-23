@@ -12,3 +12,6 @@
 #include <ctime>
 #include <cmath>
 #include <cctype>
+
+int white_king_position=74;
+int black_king_position=04;

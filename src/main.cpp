@@ -18,9 +18,9 @@ int main()
         {22, 32, 42, 52, 62, 42, 32, 22}, // 0
         {12, 12, 12, 12, 12, 12, 12, 12}, // 1
         {00, 00, 00, 00, 00, 00, 00, 00}, // 2
-        {00, 00, 00, 00, 11, 11, 11, 00}, // 3
+        {00, 00, 00, 00, 12, 11, 11, 00}, // 3
         {00, 00, 00, 00, 00, 00, 00, 00}, // 4
-        {00, 00, 00, 00, 00, 00, 42, 00}, // 5
+        {00, 00, 00, 11, 00, 00, 42, 00}, // 5
         {11, 11, 11, 11, 11, 11, 11, 11}, // 6
         {21, 31, 41, 51, 61, 41, 31, 21}  // 7
     };
@@ -44,9 +44,22 @@ int main()
             std::cout << std::endl;
         }
         std::cin >> start >> stop;
-        std::vector<int> selected_moves = find_moves(chess_board, start, chess_board[start / 10][start % 10], true);
-        for(auto& at:selected_moves)std::cout<<at;
-        std::cout<<std::endl;
+        std::vector<int> selected_moves;
+        if (chess_board[start / 10][start % 10] / 10 == 1)
+            selected_moves = find_Pawn_moves(chess_board, start, chess_board[start / 10][start % 10], true);
+        if (chess_board[start / 10][start % 10] / 10 == 2)
+            selected_moves = find_Rook_moves(chess_board, start, chess_board[start / 10][start % 10], true);
+        if (chess_board[start / 10][start % 10] / 10 == 3)
+            selected_moves = find_Knigth_moves(chess_board, start, chess_board[start / 10][start % 10], true);
+        if (chess_board[start / 10][start % 10] / 10 == 4)
+            selected_moves = find_Bishop_moves(chess_board, start, chess_board[start / 10][start % 10], true);
+        if (chess_board[start / 10][start % 10] / 10 == 5)
+            selected_moves = find_Queen_moves(chess_board, start, chess_board[start / 10][start % 10], true);
+        if (chess_board[start / 10][start % 10] / 10 == 6)
+            selected_moves = find_King_moves(chess_board, start, chess_board[start / 10][start % 10], true);
+        for (auto &at : selected_moves)
+            std::cout << at;
+        std::cout << std::endl;
         auto it = std::find(selected_moves.begin(), selected_moves.end(), stop);
         if (it != selected_moves.end())
         {
@@ -75,8 +88,8 @@ int main()
             std::cout << "attempted and illegal move";
         }
         std::cout << "enpassant: " << en_passant_position << std::endl;
-        std::cout << "enpassant_pawn_1: " <<possible_en_passant_pawn1 << std::endl;
-        std::cout << "enpassant_pawn_2: " << possible_en_passant_pawn2<< std::endl;
+        std::cout << "enpassant_pawn_1: " << possible_en_passant_pawn1 << std::endl;
+        std::cout << "enpassant_pawn_2: " << possible_en_passant_pawn2 << std::endl;
         Sleep(5000);
         system("cls");
     }

@@ -5,6 +5,9 @@ int main()
     std::unordered_map<int, std::string> chess_pieces;
     std::unordered_map<int, std::vector<int>> allowed_white_moves;
     std::unordered_map<int, std::vector<int>> allowed_black_moves;
+    int start = 0;
+    int stop = 0;
+    int turn = 1;
 
     chess_pieces[1] = "pawns";
     chess_pieces[2] = "Rook";
@@ -18,16 +21,15 @@ int main()
         {22, 32, 42, 52, 62, 42, 32, 22}, // 0
         {12, 12, 12, 12, 12, 12, 12, 12}, // 1
         {00, 00, 00, 00, 00, 00, 00, 00}, // 2
-        {00, 00, 00, 00, 12, 11, 11, 00}, // 3
+        {00, 00, 00, 00, 00, 00, 00, 00}, // 3
         {00, 00, 00, 00, 00, 00, 00, 00}, // 4
-        {00, 00, 00, 11, 00, 00, 42, 00}, // 5
+        {00, 00, 00, 00, 00, 00, 00, 00}, // 5
         {11, 11, 11, 11, 11, 11, 11, 11}, // 6
         {21, 31, 41, 51, 61, 41, 31, 21}  // 7
     };
 
     // std::cout<<allowed_moves.size();
-    int start = 0;
-    int stop = 0;
+
     while (start != 99 && stop != 99)
     {
         for (int i = 0; i < chess_board.size(); i++)
@@ -43,7 +45,46 @@ int main()
             }
             std::cout << std::endl;
         }
+        if (turn == 1)
+            std::cout << "it is white's turn" << std::endl;
+        else if (turn == -1)
+            std::cout << "it is blacks's turn" << std::endl;
         std::cin >> start >> stop;
+        if (start / 10 >= 8 || start % 10 >= 8 || start / 10 < 0 || start % 10 < 0)
+        {
+            std::cout << "input is out of bounds";
+            Sleep(5000);
+            system("cls");
+            continue;
+        }
+
+        if (stop / 10 >= 8 || stop % 10 >= 8 || stop / 10 < 0 || stop % 10 < 0)
+        {
+            std::cout << "input is out of bounds";
+            Sleep(5000);
+            system("cls");
+            continue;
+        }
+        if (turn == 1)
+        {
+            if (chess_board[start / 10][start % 10] % 10 == 2)
+            {
+                std::cout << "it is white turn to play not black" << std::endl;
+                Sleep(5000);
+                system("cls");
+                continue;
+            }
+        }
+        else if (turn == -1)
+        {
+            if (chess_board[start / 10][start % 10] % 10 == 1)
+            {
+                std::cout << "it is black turn to play not white" << std::endl;
+                Sleep(5000);
+                system("cls");
+                continue;
+            }
+        }
         std::vector<int> selected_moves;
         if (chess_board[start / 10][start % 10] / 10 == 1)
             selected_moves = find_Pawn_moves(chess_board, start, chess_board[start / 10][start % 10], true);
@@ -64,6 +105,7 @@ int main()
         if (it != selected_moves.end())
         {
             is_pawn_en_passant(start, stop, selected_moves, chess_board);
+            move_piece(chess_board, start, stop);
             if (start == white_king_position)
             {
                 white_king_position = stop;
@@ -74,22 +116,38 @@ int main()
                 black_king_position = stop;
                 std::cout << "black king has been moved" << std::endl;
             }
-            move_piece(chess_board, start, stop);
-            check_only_white_moves(allowed_white_moves, chess_board);
-            check_only_black_moves(allowed_black_moves, chess_board);
+            check_only_white_moves(allowed_white_moves, chess_board, true);
+            check_only_black_moves(allowed_black_moves, chess_board, true);
             // for(auto& at:allowed_black_moves)std::cout<<at;
+
             if (is_black_checked(black_king_position, allowed_white_moves))
+            {
                 std::cout << "black is in check" << std::endl;
+                if (is_black_king_in_checkmate(chess_board))
+                {
+                    std::cout << "black is in checkmate" << std::endl;
+                    return 0;
+                }
+            }
+
             if (is_white_checked(white_king_position, allowed_black_moves))
+            {
                 std::cout << "white is in check" << std::endl;
+                if (is_white_king_in_checkmate(chess_board))
+                {
+                    std::cout << "white is in checkmate" << std::endl;
+                    return 0;
+                }
+            }
+            if (is_white_king_in_checkmate(chess_board) || is_black_king_in_checkmate(chess_board))
+                std::cout << "this is a stalemate(draw)" << std::endl;
         }
         else
         {
             std::cout << "attempted and illegal move";
+            continue;
         }
-        std::cout << "enpassant: " << en_passant_position << std::endl;
-        std::cout << "enpassant_pawn_1: " << possible_en_passant_pawn1 << std::endl;
-        std::cout << "enpassant_pawn_2: " << possible_en_passant_pawn2 << std::endl;
+        turn *= -1;
         Sleep(5000);
         system("cls");
     }

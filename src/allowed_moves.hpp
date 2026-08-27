@@ -1,12 +1,6 @@
 #include "piece_moves.hpp"
 // std::vector<int> find_moves(std::vector<std::vector<int>> chess_board,int position,int type);
-
-
-
-
-
-
-void check_only_black_moves(std::unordered_map<int, std::vector<int>> &allowed_black_moves, std::vector<std::vector<int>> &chess_board)
+void check_only_black_moves(std::unordered_map<int, std::vector<int>> &allowed_black_moves, std::vector<std::vector<int>> &chess_board, bool king_eval)
 {
     allowed_black_moves.clear();
 
@@ -17,22 +11,24 @@ void check_only_black_moves(std::unordered_map<int, std::vector<int>> &allowed_b
             if (chess_board[i][j] == 0)
                 continue;
 
-            else if (chess_board[i][j] % 10 == 2){
-                if(chess_board[i][j]/10==1)allowed_black_moves[(i * 10) + j] = find_Pawn_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), false);
-                if(chess_board[i][j]/10==2)allowed_black_moves[(i * 10) + j] = find_Rook_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), false);
-                if(chess_board[i][j]/10==3)allowed_black_moves[(i * 10) + j] = find_Knigth_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), false);
-                if(chess_board[i][j]/10==4)allowed_black_moves[(i * 10) + j] = find_Bishop_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), false);
-                if(chess_board[i][j]/10==5)allowed_black_moves[(i * 10) + j] = find_Queen_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), false);
-                
+            else if (chess_board[i][j] % 10 == 2)
+            {
+                if (chess_board[i][j] / 10 == 1)
+                    allowed_black_moves[(i * 10) + j] = find_Pawn_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), king_eval);
+                if (chess_board[i][j] / 10 == 2)
+                    allowed_black_moves[(i * 10) + j] = find_Rook_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), king_eval);
+                if (chess_board[i][j] / 10 == 3)
+                    allowed_black_moves[(i * 10) + j] = find_Knigth_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), king_eval);
+                if (chess_board[i][j] / 10 == 4)
+                    allowed_black_moves[(i * 10) + j] = find_Bishop_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), king_eval);
+                if (chess_board[i][j] / 10 == 5)
+                    allowed_black_moves[(i * 10) + j] = find_Queen_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), king_eval);
             }
-                
-                
-
         }
     }
 }
 
-void check_only_white_moves(std::unordered_map<int, std::vector<int>> &allowed_white_moves, std::vector<std::vector<int>> &chess_board)
+void check_only_white_moves(std::unordered_map<int, std::vector<int>> &allowed_white_moves, std::vector<std::vector<int>> &chess_board, bool king_eval)
 {
     allowed_white_moves.clear();
 
@@ -43,15 +39,19 @@ void check_only_white_moves(std::unordered_map<int, std::vector<int>> &allowed_w
             if (chess_board[i][j] == 0)
                 continue;
 
-            else if (chess_board[i][j] % 10 == 1){
-                if(chess_board[i][j]/10==1)allowed_white_moves[(i * 10) + j] = find_Pawn_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), false);
-                if(chess_board[i][j]/10==2)allowed_white_moves[(i * 10) + j] = find_Rook_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), false);
-                if(chess_board[i][j]/10==3)allowed_white_moves[(i * 10) + j] = find_Knigth_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), false);
-                if(chess_board[i][j]/10==4)allowed_white_moves[(i * 10) + j] = find_Bishop_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), false);
-                if(chess_board[i][j]/10==5)allowed_white_moves[(i * 10) + j] = find_Queen_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), false);
-                if(chess_board[i][j]/10==6)allowed_white_moves[(i * 10) + j] = find_King_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), false);
+            else if (chess_board[i][j] % 10 == 1)
+            {
+                if (chess_board[i][j] / 10 == 1)
+                    allowed_white_moves[(i * 10) + j] = find_Pawn_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), king_eval);
+                if (chess_board[i][j] / 10 == 2)
+                    allowed_white_moves[(i * 10) + j] = find_Rook_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), king_eval);
+                if (chess_board[i][j] / 10 == 3)
+                    allowed_white_moves[(i * 10) + j] = find_Knigth_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), king_eval);
+                if (chess_board[i][j] / 10 == 4)
+                    allowed_white_moves[(i * 10) + j] = find_Bishop_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), king_eval);
+                if (chess_board[i][j] / 10 == 5)
+                    allowed_white_moves[(i * 10) + j] = find_Queen_moves(chess_board, ((i * 10) + j), (chess_board[i][j]), king_eval);
             }
-
         }
     }
 }
@@ -60,6 +60,7 @@ void move_piece(std::vector<std::vector<int>> &chess_board, int start, int stop)
 {
     chess_board[stop / 10][stop % 10] = chess_board[start / 10][start % 10];
     chess_board[start / 10][start % 10] = 00;
+    
 }
 
 bool is_black_checked(int black_king_position, std::unordered_map<int, std::vector<int>> &allowed_white_moves)
@@ -88,8 +89,9 @@ bool is_white_king_safe(int start, int stop, std::vector<std::vector<int>> chess
     // std::cout << "s";
     move_piece(chess_board, start, stop);
     int king_position = white_king_position;
+    if(start==white_king_position)king_position=stop;
     std::unordered_map<int, std::vector<int>> allowed_black_moves;
-    check_only_black_moves(allowed_black_moves, chess_board);
+    check_only_black_moves(allowed_black_moves, chess_board, false);
     if (is_white_checked(king_position, allowed_black_moves))
         return false;
     return true;
@@ -100,8 +102,9 @@ bool is_black_king_safe(int start, int stop, std::vector<std::vector<int>> chess
     // std::cout << "a";
     move_piece(chess_board, start, stop);
     int king_position = black_king_position;
+     if(start==black_king_position)king_position=stop;
     std::unordered_map<int, std::vector<int>> allowed_white_moves;
-    check_only_white_moves(allowed_white_moves, chess_board);
+    check_only_white_moves(allowed_white_moves, chess_board, false);
     if (is_black_checked(king_position, allowed_white_moves))
         return false;
     return true;
@@ -196,4 +199,28 @@ void is_pawn_en_passant(int start, int stop, std::vector<int> selected_moves, st
             }
         }
     }
+}
+
+bool is_white_king_in_checkmate(std::vector<std::vector<int>> &chess_board)
+{
+    std::unordered_map<int, std::vector<int>> allowed_white_moves;
+    check_only_white_moves(allowed_white_moves, chess_board, true);
+    for (const auto &pair : allowed_white_moves)
+    {
+        if (allowed_white_moves[pair.first].size() != 0)
+            return false;
+    }
+    return true;
+}
+
+bool is_black_king_in_checkmate(std::vector<std::vector<int>> &chess_board)
+{
+    std::unordered_map<int, std::vector<int>> allowed_black_moves;
+    check_only_black_moves(allowed_black_moves, chess_board, true);
+    for (const auto &pair : allowed_black_moves)
+    {
+        if (allowed_black_moves[pair.first].size() != 0)
+            return false;
+    }
+    return true;
 }

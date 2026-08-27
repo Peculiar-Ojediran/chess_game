@@ -33,7 +33,7 @@ std::vector<int> find_Pawn_moves(std::vector<std::vector<int>> &chess_board, int
          if (i + 1 <8 && j + 1 < 8 && king_eval)
         {
 
-            if (chess_board[i - 1][j + 1] % 10 == 1 && is_black_king_safe(position, (((i + 1) * 10) + (j + 1)), chess_board)){
+            if (chess_board[i + 1][j + 1] % 10 == 1 && is_black_king_safe(position, (((i + 1) * 10) + (j + 1)), chess_board)){
                 allowed_moves.push_back((((i + 1) * 10) + (j + 1)));
 
             }
@@ -41,22 +41,35 @@ std::vector<int> find_Pawn_moves(std::vector<std::vector<int>> &chess_board, int
         if (i + 1 <8 && j - 1 >=0 && king_eval)
         {
 
-            if (chess_board[i + 1][j - 1] % 10 == 1 && is_black_king_safe(position, (((i + 1) * 10) + (j - 1)), chess_board)){
+           if (chess_board[i + 1][j - 1] % 10 == 1 && is_black_king_safe(position, (((i + 1) * 10) + (j - 1)), chess_board)){
                 allowed_moves.push_back((((i + 1) * 10) + (j - 1)));
+           }
+            
+        }
+         if (i + 1 <8 && j + 1 < 8 && !king_eval)
+        {
 
-            }
+            allowed_moves.push_back((((i + 1) * 10) + (j + 1)));
+
+        
+        }
+        if (i + 1 <8 && j - 1 >=0 && !king_eval)
+        {
+
+           
+            allowed_moves.push_back((((i + 1) * 10) + (j - 1)));
+
+            
         }
         i++;
-        if (i < 8 && (chess_board[i][j] % 10) == 0 && king_eval && is_black_king_safe(position, ((i * 10) + j), chess_board))
+        if (i >= 0 && i < 8 && (chess_board[i][j] % 10) == 0 && king_eval && is_black_king_safe(position, ((i * 10) + j), chess_board))
             allowed_moves.push_back(((i * 10) + j));
-        if (i > 0 && (chess_board[i][j] % 10) == 0 && !king_eval)
-            allowed_moves.push_back(((i * 10) + j));
+        
 
         i++;
         if (i - 2 == 1 && ((chess_board[i][j] % 10) == 0) && king_eval && is_black_king_safe(position, ((i * 10) + j), chess_board))
             allowed_moves.push_back(((i * 10) + j));
-        if (i - 2 == 1 && ((chess_board[i][j] % 10) == 0) && !king_eval)
-            allowed_moves.push_back(((i * 10) + j));
+       
     }
 
     if (type == 11)
@@ -66,7 +79,7 @@ std::vector<int> find_Pawn_moves(std::vector<std::vector<int>> &chess_board, int
             if (en_passant_position % 10 < j)
             {
 
-                bool bullshit = is_white_king_safe(position, (((i - 1) * 10) + (j - 1)), chess_board);
+                
 
                 if (i > 0 && king_eval && is_white_king_safe(position, (((i - 1) * 10) + (j - 1)), chess_board))
                 {
@@ -76,7 +89,7 @@ std::vector<int> find_Pawn_moves(std::vector<std::vector<int>> &chess_board, int
             else if (en_passant_position % 10 > j)
             {
 
-                bool bullshit = is_white_king_safe(position, (((i - 1) * 10) + (j - 1)), chess_board);
+                
 
                 if (i > 0 && king_eval && is_white_king_safe(position, (((i - 1) * 10) + (j + 1)), chess_board))
                 {
@@ -101,16 +114,30 @@ std::vector<int> find_Pawn_moves(std::vector<std::vector<int>> &chess_board, int
 
             }
         }
+        if (i - 1 >= 0 && j + 1 < 8 && !king_eval)
+        {
+
+          
+            allowed_moves.push_back((((i - 1) * 10) + (j + 1)));
+
+            
+        }
+        if (i - 1 >= 0 && j - 1 >=0 && !king_eval)
+        {
+
+            
+            allowed_moves.push_back((((i - 1) * 10) + (j - 1)));
+
+            
+        }
         i--;
-        if (i < 8 && (chess_board[i][j] % 10) == 0 && king_eval && is_white_king_safe(position, ((i * 10) + j), chess_board))
+        if (i >= 0 && i < 8 && (chess_board[i][j] % 10) == 0 && king_eval && is_white_king_safe(position, ((i * 10) + j), chess_board))
             allowed_moves.push_back(((i * 10) + j));
-        if (i < 8 && (chess_board[i][j] % 10) == 0 && !king_eval)
-            allowed_moves.push_back(((i * 10) + j));
+       
         i--;
         if (i + 2 == 6 && ((chess_board[i][j] % 10) == 0) && king_eval && is_white_king_safe(position, ((i * 10) + j), chess_board))
             allowed_moves.push_back(((i * 10) + j));
-        if (i + 2 == 6 && ((chess_board[i][j] % 10) == 0) && !king_eval)
-            allowed_moves.push_back(((i * 10) + j));
+       
     }
     return allowed_moves;
 }

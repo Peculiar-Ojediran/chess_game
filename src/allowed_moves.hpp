@@ -60,7 +60,6 @@ void move_piece(std::vector<std::vector<int>> &chess_board, int start, int stop)
 {
     chess_board[stop / 10][stop % 10] = chess_board[start / 10][start % 10];
     chess_board[start / 10][start % 10] = 00;
-    
 }
 
 bool is_black_checked(int black_king_position, std::unordered_map<int, std::vector<int>> &allowed_white_moves)
@@ -89,7 +88,8 @@ bool is_white_king_safe(int start, int stop, std::vector<std::vector<int>> chess
     // std::cout << "s";
     move_piece(chess_board, start, stop);
     int king_position = white_king_position;
-    if(start==white_king_position)king_position=stop;
+    if (start == white_king_position)
+        king_position = stop;
     std::unordered_map<int, std::vector<int>> allowed_black_moves;
     check_only_black_moves(allowed_black_moves, chess_board, false);
     if (is_white_checked(king_position, allowed_black_moves))
@@ -102,7 +102,8 @@ bool is_black_king_safe(int start, int stop, std::vector<std::vector<int>> chess
     // std::cout << "a";
     move_piece(chess_board, start, stop);
     int king_position = black_king_position;
-     if(start==black_king_position)king_position=stop;
+    if (start == black_king_position)
+        king_position = stop;
     std::unordered_map<int, std::vector<int>> allowed_white_moves;
     check_only_white_moves(allowed_white_moves, chess_board, false);
     if (is_black_checked(king_position, allowed_white_moves))
@@ -201,7 +202,7 @@ void is_pawn_en_passant(int start, int stop, std::vector<int> selected_moves, st
     }
 }
 
-bool is_white_king_in_checkmate(std::vector<std::vector<int>> &chess_board)
+bool does_white_have_any_legal_moves(std::vector<std::vector<int>> &chess_board)
 {
     std::unordered_map<int, std::vector<int>> allowed_white_moves;
     check_only_white_moves(allowed_white_moves, chess_board, true);
@@ -213,7 +214,7 @@ bool is_white_king_in_checkmate(std::vector<std::vector<int>> &chess_board)
     return true;
 }
 
-bool is_black_king_in_checkmate(std::vector<std::vector<int>> &chess_board)
+bool does_black_have_any_legal_moves(std::vector<std::vector<int>> &chess_board)
 {
     std::unordered_map<int, std::vector<int>> allowed_black_moves;
     check_only_black_moves(allowed_black_moves, chess_board, true);
@@ -223,4 +224,43 @@ bool is_black_king_in_checkmate(std::vector<std::vector<int>> &chess_board)
             return false;
     }
     return true;
+}
+void is_a_white_pawn_being_promoted(int stop, std::vector<std::vector<int>> &chess_board)
+{
+    if (chess_board[stop / 10][stop % 10] == 11 && stop / 10 == 0)
+    {
+        std::cout << "you're pawn has been promoted pls select the peice you would like to promote it to:" << std::endl;
+        int promotion_piece = 00;
+        std::cin >> promotion_piece;
+        while (
+            promotion_piece != 21 &&
+            promotion_piece != 31 &&
+            promotion_piece != 41 &&
+            promotion_piece != 51)
+        {
+
+            std::cout << "you selected an unavailable piece please select again" << std::endl;
+            std::cin >> promotion_piece;
+        }
+        chess_board[stop / 10][stop % 10] = promotion_piece;
+    }
+}
+void is_a_black_pawn_being_promoted(int stop, std::vector<std::vector<int>> &chess_board)
+{
+    if (chess_board[stop / 10][stop % 10] == 12 && stop / 10 == 7)
+    {
+        std::cout << "you're pawn has been promoted pls select the peice you would like to promote it to:" << std::endl;
+        int promotion_piece = 00;
+        std::cin >> promotion_piece;
+        while (
+            promotion_piece != 22 &&
+            promotion_piece != 32 &&
+            promotion_piece != 42 &&
+            promotion_piece != 52)
+        {
+            std::cout << "you selected an unavailable piece please select again" << std::endl;
+            std::cin >> promotion_piece;
+        }
+        chess_board[stop / 10][stop % 10] = promotion_piece;
+    }
 }

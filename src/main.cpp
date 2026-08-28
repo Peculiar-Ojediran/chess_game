@@ -50,7 +50,7 @@ int main()
         else if (turn == -1)
             std::cout << "it is blacks's turn" << std::endl;
         std::cin >> start >> stop;
-        if (start / 10 >= 8 || start % 10 >= 8 || start / 10 < 0 || start % 10 < 0)
+        if (start / 10 >= 8 || start % 10 >= 8 || start / 10 < 0 || start % 10 < 0 || start < 0 || start > 77)
         {
             std::cout << "input is out of bounds";
             Sleep(5000);
@@ -120,31 +120,40 @@ int main()
             check_only_black_moves(allowed_black_moves, chess_board, true);
             // for(auto& at:allowed_black_moves)std::cout<<at;
 
-            if (is_black_checked(black_king_position, allowed_white_moves))
+            if (is_black_checked(black_king_position, allowed_white_moves)&& turn==1)
             {
                 std::cout << "black is in check" << std::endl;
-                if (is_black_king_in_checkmate(chess_board))
+                if (does_black_have_any_legal_moves(chess_board))
                 {
                     std::cout << "black is in checkmate" << std::endl;
                     return 0;
                 }
             }
 
-            if (is_white_checked(white_king_position, allowed_black_moves))
+            if (is_white_checked(white_king_position, allowed_black_moves)&& turn==1)
             {
                 std::cout << "white is in check" << std::endl;
-                if (is_white_king_in_checkmate(chess_board))
+                if (does_white_have_any_legal_moves(chess_board))
                 {
                     std::cout << "white is in checkmate" << std::endl;
                     return 0;
                 }
             }
-            if (is_white_king_in_checkmate(chess_board) || is_black_king_in_checkmate(chess_board))
+            if (does_white_have_any_legal_moves(chess_board) && turn==1){
                 std::cout << "this is a stalemate(draw)" << std::endl;
+                return 0;
+            }
+               
+            if(does_black_have_any_legal_moves(chess_board)&& turn==-1){
+                std::cout << "this is a stalemate(draw)" << std::endl;
+                return 0;
+            }
+            is_a_white_pawn_being_promoted(stop,chess_board);
+            is_a_black_pawn_being_promoted(stop,chess_board);
         }
         else
         {
-            std::cout << "attempted and illegal move";
+            std::cout << "attempted and illegal move"<< std::endl;
             continue;
         }
         turn *= -1;
